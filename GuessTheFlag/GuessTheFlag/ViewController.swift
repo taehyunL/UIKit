@@ -21,6 +21,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
         
         button1.layer.borderWidth = 1
@@ -32,6 +34,8 @@ class ViewController: UIViewController {
         button3.layer.borderColor = UIColor.lightGray.cgColor
         
         askQuestion(action: nil)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
     }
 
     func askQuestion(action: UIAlertAction!) {
@@ -42,10 +46,16 @@ class ViewController: UIViewController {
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
         
-        navigationController?.navigationBar.topItem?.title = countries[correctAnswer].uppercased()
-        title = "\(score)"
+        
+        title = countries[correctAnswer].uppercased()
     }
     
+    @objc func shareTapped() {
+        let vc = UIActivityViewController(activityItems: [String(score)], applicationActivities: [])
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc, animated: true)
+        
+    }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String

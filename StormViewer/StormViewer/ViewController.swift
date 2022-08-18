@@ -27,6 +27,8 @@ class ViewController: UITableViewController {
             }
         }
         pictures.sort()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(sharedTapped))
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -46,6 +48,12 @@ class ViewController: UITableViewController {
             vc.currentPictureIndex = indexPath.row
             navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    @objc func sharedTapped() {
+        let vc = UIActivityViewController(activityItems: [], applicationActivities: nil)
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc, animated: true)
     }
     
 }
