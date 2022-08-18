@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
+    var buttonTapCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,24 +42,35 @@ class ViewController: UIViewController {
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
         
-        title = countries[correctAnswer].uppercased()
+        navigationController?.navigationBar.topItem?.title = countries[correctAnswer].uppercased()
+        title = "\(score)"
     }
     
     
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
-        
-        if sender.tag == correctAnswer {
-            title = "Correct"
-            score += 1
+        buttonTapCount += 1
+
+        if buttonTapCount == 10 {
+            score = 0
+            buttonTapCount = 0
+            title = "final"
+            let ac = UIAlertController(title: title, message: "finale score is \(score)", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Continue?", style: .default, handler: askQuestion))
+            present(ac, animated: true)
         } else {
-            title = "Wrong"
-            score -= 1
+            if sender.tag == correctAnswer {
+                title = "Correct"
+                score += 1
+            } else {
+                title = "Wrong! That's the flag of \(countries[sender.tag])"
+                score -= 1
+            }
+            let ac = UIAlertController(title: title, message: "your score is \(score)", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Continue?", style: .default, handler: askQuestion))
+            present(ac, animated: true)
         }
-        
-        let ac = UIAlertController(title: title, message: "your score is \(score)", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Continue?", style: .default, handler: askQuestion))
-        present(ac, animated: true)
+
     }
     
 }
