@@ -18,7 +18,11 @@ class ViewController: UIViewController {
     var activatedButtons = [UIButton]()
     var solutions = [String]()
     
-    var score = 0
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
     var level = 1
     
     override func loadView() {
@@ -69,6 +73,7 @@ class ViewController: UIViewController {
         
         let buttonsView = UIView()
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
+        buttonsView.layer.borderWidth = 1
         view.addSubview(buttonsView)
         
         NSLayoutConstraint.activate([
@@ -144,11 +149,15 @@ class ViewController: UIViewController {
             currentAnswer.text = ""
             score += 1
 
-            if score % 7 == 0 {
+            if score > 0 && score % 7 == 0 {
                 let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
                 present(ac, animated: true)
             }
+        } else {
+            let ac = UIAlertController(title: "Wrong answer", message: "try again", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default, handler: scoreDown))
+            present(ac, animated: true)
         }
     }
     
@@ -212,5 +221,14 @@ class ViewController: UIViewController {
         }
     }
     
+    func scoreDown(action: UIAlertAction) {
+        score -= 1
+        
+        currentAnswer.text = ""
+        
+        for btn in letterButtons {
+            btn.isHidden = false
+        }
+    }
 }
 
